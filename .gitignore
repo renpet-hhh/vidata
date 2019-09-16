@@ -1,0 +1,8 @@
+.vscode
+build
+files
+node_modules
+.env
+public
+output
+src/pages/test.tsx

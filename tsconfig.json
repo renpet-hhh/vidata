@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "noEmit": true,
+        "jsx": "react",
+        "allowJs": false,
+        "esModuleInterop": true,
+        "alwaysStrict": true,
+        "forceConsistentCasingInFileNames": true,
+        "strictNullChecks": true,
+        "pretty": true,
+        "strict": true,
+        "moduleResolution": "node",
+        "types": [
+            "react",
+            "jest" // necessary because react-native won't be used (I think)
+        ]
+    }
+}
