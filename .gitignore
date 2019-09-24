@@ -7,3 +7,5 @@ public
 output
 compiled
 src/pages/test.tsx
+webpack.config.js
+globals.js

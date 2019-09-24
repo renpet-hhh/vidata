@@ -1,8 +1,11 @@
 import { App, Request, Response, NextFunction } from "../../types/Request"
+import express from 'express';
 import path from 'path';
 
 
 const setStaticRoutes = (app: App) => {
+
+    app.use(express.static("build"));
 
     app.use('/images/avatar', (req: Request, res: Response, next: NextFunction) => {
         res.header("Cache-Control", "max-age=8640000");

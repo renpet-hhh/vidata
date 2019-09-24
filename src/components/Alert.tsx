@@ -50,7 +50,8 @@ export default function Alert(props: Props) {
         },
         alertText: {
             display: "inline",
-            marginLeft: "1rem"
+            marginLeft: "1rem",
+            whiteSpace: "nowrap"
         },
         closeButton: {
             padding: "0 0.8rem"

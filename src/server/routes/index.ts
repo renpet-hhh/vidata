@@ -11,14 +11,13 @@ import loggerMiddleware from '../global-middlewares/logger';
 import initSession from '../global-middlewares/initSession';
 import serverRenderer from '../global-middlewares/serverRenderer';
 
-import webpack from 'webpack';
-import webpackConfig from '../../../webpack.config.babel';
+import webpack, { Configuration } from 'webpack';
+const webpackConfig : [Configuration, Configuration] = require('../../../webpack.config.js');
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import { App } from '../../types/Request';
 import setStaticRoutes from '../global-middlewares/setStaticRoutes';
-
 
 
 const setRoutes = (app: ReturnType<typeof express>, extra: {

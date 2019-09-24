@@ -1,6 +1,5 @@
 import express, { RequestHandler } from 'express';
 import cors from 'cors';
-import serverRenderer from './global-middlewares/serverRenderer';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
 import Connection from './mongodb/Connection';
@@ -77,5 +76,3 @@ export const runServer = () => {
         console.log("Listening on " + PORT + "...");
     })
 }
-
-export default () => serverRenderer; // used by webpack-hot-server-middleware

@@ -1,14 +1,14 @@
 import webpack, { Configuration } from "webpack";
 import nodeExternals from 'webpack-node-externals';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'path';
 
+const clientEntry = process.env.NODE_ENV === "production" ? ["eventsource-polyfill", "./src/index.tsx"] :
+    ["eventsource-polyfill", "react-hot-loader/patch", "webpack-hot-middleware/client?path=/__webpack_hmr", "./src/index.tsx"];
 
 const clientConfig: Configuration = {
     name: 'client',
-    entry: [
-        "webpack-hot-middleware/client",
-        "./src/index.tsx"
-    ],
+    entry: clientEntry,
     output: {
         filename: "client.js",
         path: 'C:\\Users\\renan\\OneDrive\\Documentos\\React\\VidataUniversal\\build',
@@ -56,7 +56,10 @@ const clientConfig: Configuration = {
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.jsx', '.js']
+        extensions: ['.tsx', '.ts', '.jsx', '.js'],
+        alias: {
+            'react-dom': '@hot-loader/react-dom'
+        }
     },
     plugins: [
         new MiniCssExtractPlugin({
@@ -69,10 +72,10 @@ const clientConfig: Configuration = {
 
 const serverConfig: Configuration = {
     name: 'server',
-    entry: "./src/server/server.tsx",
+    entry: "./src/server/global-middlewares/serverRenderer.tsx",
     output: {
-        filename: "server-bundle.js",
-        path: 'C:\\Users\\renan\\OneDrive\\Documentos\\React\\VidataUniversal\\src\\server',
+        filename: "server.js",
+        path: path.resolve("build"),
         libraryTarget: "commonjs2"
     },
     // @ts-ignore
@@ -117,4 +120,4 @@ const serverConfig: Configuration = {
     }
 }
 
-export default [clientConfig, serverConfig];
+module.exports = [clientConfig, serverConfig];
