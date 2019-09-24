@@ -4,6 +4,15 @@ import RequestErr from "../../constants/RequestErr";
 import { DBProfile } from "../../types/Profile";
 import { DeepPartial } from "../../types/utils";
 
+const _DEFAULT_PROFILE: Omit<DBProfile, "_id"> = {
+    username: "",
+    password: "",
+    email: "",
+    bioText: "",
+    collection: [],
+    awards: []
+}
+
 /** A wrapper with applied business logic and extra safety around the Db instance */
 export default class DbWrapper {
     private _db: Db;
@@ -35,7 +44,7 @@ export default class DbWrapper {
         if (emailExistsInDB) throw new Error(RequestErr.ALREADY_USED_EMAIL);
         console.log("hashing password...");
         const hashedPassword = await hash(password, 10);
-        this._users.insertOne({ username: username, password: hashedPassword, email: email, bioText: "" });
+        this._users.insertOne({ ..._DEFAULT_PROFILE, username: username, password: hashedPassword, email: email });
         console.log("created!");
         return true;
     }

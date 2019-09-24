@@ -8,7 +8,8 @@ import FixableTextArea from '../components/FixableTextArea';
 import { askSaveProfile } from '../server/routes/api/db/profile/requests';
 import { Dispatch } from 'redux';
 import { Center, FlexVertical, FlexHorizontal, Blank } from '../components/styled/positionals';
-import { CtnGray_style } from '../components/styled/containers';
+import NothingSoFar from '../components/NothingSoFar';
+import Collection from '../components/Collection';
 
 interface Props extends ReturnType<typeof mapState>, ReturnType<typeof mapDispatch> {
 
@@ -23,32 +24,23 @@ const Profile = (props: Props) => {
         alignSelf: "flex-start"
     };
 
+
+
+
     return (
         <div>
             <Header></Header>
             <Center style={{ marginTop: "1rem" }}>
                 <FlexVertical style={{ position: "relative", marginTop: "1rem", width: "75vw" }}>
-                    <span style={{ fontSize: "1.9rem", marginLeft: "1rem", marginBottom: "2rem" }}>{props.profile.username}</span>
+                    <span style={{ fontSize: "1.9rem", marginBottom: "2rem" }}>{props.profile.username}</span>
                     <FlexHorizontal style={{ width: "100%" }}>
                         <AvatarEdit></AvatarEdit>
-                        <FixableTextArea onBlur={bioText => askSaveProfile(props.dispatch, { bioText })} defaultText={props.profile.bioText} style={{ width: "100%", height: "7rem", margin: "0 2rem" }} placeholder="Tell us about you!"></FixableTextArea>
+                        <FixableTextArea onBlur={bioText => askSaveProfile(props.dispatch, { bioText })} defaultText={props.profile.bioText} style={{width: "100%", height: "8rem", margin: "1rem", padding: "1rem"}} placeholder="Tell us about you!"></FixableTextArea>
                     </FlexHorizontal>
                     <header style={headerStyle}>Collection</header>
-                    <FlexVertical style={{ width: "100%", ...CtnGray_style }}>
-                        <Blank vertical="5rem"></Blank>
-                        <div>
-                            <span style={{ color: "#A0B0A0", fontSize: "1.5rem" }}>Nothing so far</span>
-                        </div>
-                        <Blank vertical="5rem"></Blank>
-                    </FlexVertical>
+                    {props.profile.collection.length > 0 ? <Collection/> : <NothingSoFar/>}
                     <header style={headerStyle}>Awards</header>
-                    <FlexVertical style={{ width: "100%", ...CtnGray_style }}>
-                        <Blank vertical="5rem"></Blank>
-                        <div>
-                            <span style={{ color: "#A0B0A0", fontSize: "1.5rem" }}>Nothing so far</span>
-                        </div>
-                        <Blank vertical="5rem"></Blank>
-                    </FlexVertical>
+                    {props.profile.awards.length > 0 ? <NothingSoFar/> : <NothingSoFar/>}
                 </FlexVertical>
             </Center>
             <Logout>Logout</Logout>

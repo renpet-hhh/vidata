@@ -1,4 +1,4 @@
-import { createStore, Store } from 'redux';
+import { createStore, Store, AnyAction } from 'redux';
 import rootReducer from './reducers/rootReducer';
 import { ClientExclusiveSessionData } from '../types/SessionData';
 import { UserInfo } from '../types/Profile';
@@ -17,16 +17,34 @@ export interface AppState {
 }
 
 const configStore = (initialState?: AppState): Store<AppState> => {
-    let isInClient = true;
-    try {
-        window;
-        document;
-    } catch (err) {
-        isInClient = false;
+    let isInClient = typeof window !== "undefined";
+    const actionSanitizer = (action: AnyAction) => {
+        const sanitizedAction = Object.assign({}, action);
+        if (action.type === "UPDATE") {
+            if (action.merge.collection) {
+                sanitizedAction.merge.collection = [];
+            }
+        }
+        if (action.type === "LOGIN") {
+            if (action.profile.collection) {
+                sanitizedAction.profile.collection = [];
+            }
+        }
+        return sanitizedAction;
+    }
+    const stateSanitizer = (state: AppState) => {
+        const sanitizedState : any = Object.assign({}, state);
+        if (state.profile) {
+            if (state.profile.collection) {
+                sanitizedState.profile.collection = [];
+            }
+        }
+        return sanitizedState;
     }
     const store: Store<AppState> = createStore(rootReducer, initialState,
+        isInClient ?
         // @ts-ignore : Enables redux devtools extension
-        isInClient ? window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() : undefined);
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({actionSanitizer, stateSanitizer}) : undefined);
 
     return store;
 }

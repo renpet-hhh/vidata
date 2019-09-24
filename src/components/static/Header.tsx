@@ -7,10 +7,11 @@ import { AppState } from '../../store/configStore';
 import RestrictRoute from '../routes/RestrictRoute';
 import { FlexHorizontalBetween } from '../styled/positionals';
 
-type Props = {
-    session: AppState['session']
+interface Props extends ReturnType<typeof mapState> {
+
 }
-const NavBarWhenLoggedIn = () => <NavBar names={["Profile", "Test"]} paths={["/profile", "/test"]} spaceBetween="1.5rem"></NavBar>;
+
+const NavBarWhenLoggedIn = () => <NavBar names={["New", "Profile", "Test"]} paths={["/new", "/profile", "/test"]} spaceBetween="1.5rem"></NavBar>;
 const NavBarWhenNotLoggedIn = () => <NavBar names={["Sign in", "Sign up", "Test"]} paths={["/signin", "/signup", "/test"]} spaceBetween="1.5rem"></NavBar>;
 
 const Header = (props: Props) => {

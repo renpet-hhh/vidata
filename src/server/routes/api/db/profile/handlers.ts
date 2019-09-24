@@ -2,7 +2,7 @@ import { Request, Response } from '../../../../../types/Request';
 import Connection from '../../../../mongodb/Connection';
 import RequestErr from '../../../../../constants/RequestErr';
 import { UserInfo } from '../../../../../types/Profile';
-import actionUpdateProfileByReq from '../../../../../store/actions/profile/actionUpdateProfileByReq';
+import actionUpdateProfile from '../../../../../store/actions/profile/actionUpdateProfile';
 
 /**
  * Saves profile info (account persistent data)
@@ -18,7 +18,7 @@ import actionUpdateProfileByReq from '../../../../../store/actions/profile/actio
  */
 export const handleSaveProfile = async (req: Request, res: Response) => {
     const db = await Connection.get();
-    const validFields: (keyof UserInfo)[] = ["bioText", "awards", "collections"];
+    const validFields: (keyof UserInfo)[] = ["bioText", "awards", "collection"];
     let failed = false;
     for (const attr in req.body) {
         if (attr === "username") continue;
@@ -35,7 +35,7 @@ export const handleSaveProfile = async (req: Request, res: Response) => {
         res.status(500).send(RequestErr.MONGODB_ERROR);
         return;
     }
-    res.status(200).send({ action: await actionUpdateProfileByReq(req) });
+    res.status(200).send({ action: await actionUpdateProfile(req.body) });
 }
 
 /**

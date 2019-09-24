@@ -9,7 +9,9 @@ const INITIAL_STATE: AppState['profile'] = {
     bioText: "",
     lastModified: {
         avatar: 0
-    }
+    },
+    collection: [],
+    awards: []
 }
 
 /**
@@ -20,7 +22,9 @@ const profileReducer = (state = INITIAL_STATE, action: AnyAction): AppState['pro
     switch (action.type) {
         case 'UPDATE':
             return _.mergeWith({}, state, action.merge, (value, srcValue, key, obj, source) => {
-                /** For future customization */
+                if (Array.isArray(srcValue)) {
+                    return srcValue;
+                }
                 return;
             });
         case 'LOGIN':

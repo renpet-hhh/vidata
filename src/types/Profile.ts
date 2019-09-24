@@ -4,8 +4,8 @@ export interface DBProfile {
     password: string,
     email: string,
     bioText: string,
-    collections?: any,
-    awards?: any
+    collection: Uint8ClampedArray[],
+    awards: any[]
 }
 
 export interface OutOfDBProfile {
