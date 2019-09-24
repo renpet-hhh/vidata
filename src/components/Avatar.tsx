@@ -25,7 +25,7 @@ const Avatar = (props: Props) => {
 
     return (
         <Center style={{ width: props.length, height: props.length, backgroundColor: "black" }}>
-            {props.lastModified && <img src={`/images/avatar/${props.username}.v.${props.lastModified.toString(20)}.jpeg`} style={{ width: props.length, height: props.length, position: "absolute" }} alt="User avatar"></img>}
+            {<img src={`/images/avatar/${props.username}.v.${props.lastModified.toString(20)}.jpeg`} style={{ width: props.length, height: props.length, position: "absolute" }} alt="User avatar"></img>}
             {showAlert && props.errorMsg && <Alert onClick={() => setShowAlert(false)} type="error">{props.errorMsg}</Alert>}
         </Center>
     )

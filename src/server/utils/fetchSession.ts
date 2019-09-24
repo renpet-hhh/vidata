@@ -12,11 +12,10 @@ const fetchSession = async (req: Request, username: string) => {
     const db = await Connection.get();
     let profile = await db.getProfile(username);
     if (profile) {
-        console.log("fetchSession workspaceFolder:");
-        console.log(global.__workspaceFolder);
-        const outOfDBInfo: OutOfDBProfile = {
+        const avatarPath = path.join(path.resolve(global.__workspaceFolder, "files/images/avatar"), `${profile.username}.jpeg`)
+        let outOfDBInfo: OutOfDBProfile = {
             lastModified: {
-                avatar: fs.statSync(path.join(path.resolve(global.__workspaceFolder, "files/images/avatar"), `${profile.username}.jpeg`)).mtime.getTime()
+                avatar: fs.existsSync(avatarPath) ? fs.statSync(avatarPath).mtime.getTime() : 0
             }
         }
         req.session.profile = { ...profile, ...outOfDBInfo }
