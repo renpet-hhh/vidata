@@ -1,17 +1,19 @@
-import styled from "styled-components";
-import { CSSProperties } from "react";
+import styled, { css } from "styled-components";
+import { mixinFormAligned } from "./positionals";
 
-export const CtnGray = styled.div`
+export const mixinCtnGray = css`
     border: 1px solid #C0C0C0;
     borderRadius: 1%;
     margin: 1rem;
     box-shadow: 2px 2px 5px 1px #D0D0D0;
     box-sizing: border-box;
 `;
-export const CtnGray_style: CSSProperties = {
-    border: "1px solid #C0C0C0",
-    borderRadius: "1%",
-    padding: "1rem",
-    boxShadow: "2px 2px 5px 1px #D0D0D0",
-    boxSizing: "border-box"
-}
+
+export const CtnGray = styled.div`
+    ${mixinCtnGray}
+`;
+
+export const Form = styled.form`
+    ${mixinFormAligned}
+    ${mixinCtnGray}
+`;

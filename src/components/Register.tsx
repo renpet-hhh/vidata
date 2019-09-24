@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useRef, CSSProperties } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import LabeledInput from './LabeledInput';
 import Alert from './Alert';
 import RequestErr from '../constants/RequestErr';
-import COLOR from '../constants/COLOR';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { askUserAlreadyExists } from '../server/routes/api/db/requests';
 import MESSAGE from '../constants/MESSAGE';
 import { askSignup } from '../server/routes/api/db/session/request';
 import { BtnGray } from './styled/buttons';
-import { CtnGray_style } from './styled/containers';
-import { Blank, FlexVertical, FormAligned } from './styled/positionals';
+import { Blank, FlexVertical } from './styled/positionals';
+import { Form } from './styled/containers';
 
 const SPACE_FOR_ALERT = "5rem";
 
@@ -68,19 +67,18 @@ const Register = (props: Props) => {
 
     return (
         <div>
-            <Blank vertical={SPACE_FOR_ALERT}></Blank>
-            <FlexVertical style={{ position: "relative" }}>
+            <FlexVertical style={{ position: "relative", marginTop: SPACE_FOR_ALERT }}>
                 {alertText &&
-                    <div style={{ position: "absolute", top: `-${SPACE_FOR_ALERT}` }}>
-                        <Alert height="4rem" onClick={() => setAlertText("")}>{alertText}</Alert>
+                    <div style={{ position: "absolute", top: `-${SPACE_FOR_ALERT}`, left: "50%", transform: "translate(-50%, 0)" }}>
+                        <Alert height="5rem" onClick={() => setAlertText("")}>{alertText}</Alert>
                     </div>
                 }
-                <FormAligned onSubmit={onSubmit} style={{ position: "relative", ...CtnGray_style }}>
+                <Form onSubmit={onSubmit} style={{ padding: "1.5rem" }}>
                     <LabeledInput inputWidth="20rem" marginVertical="0.8rem" invalid={usernameWarningActive} label="Username" onChange={setUsername}></LabeledInput>
                     <LabeledInput inputWidth="20rem" marginVertical="0.8rem" label="Password" onChange={setPassword}></LabeledInput>
                     <LabeledInput inputWidth="20rem" marginVertical="0.8rem" label="Email" onChange={setEmail}></LabeledInput>
                     <BtnGray type="submit">Sign up</BtnGray>
-                </FormAligned>
+                </Form>
             </FlexVertical>
         </div>
 

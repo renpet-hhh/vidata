@@ -9,8 +9,8 @@ import MESSAGE from '../constants/MESSAGE';
 import { AxiosResponse } from 'axios';
 import { askSignin } from '../server/routes/api/db/session/request';
 import { BtnGray } from './styled/buttons';
-import { CtnGray_style } from './styled/containers';
 import { Blank, FlexVertical, FormAligned } from './styled/positionals';
+import { Form } from './styled/containers';
 
 interface Props extends ReturnType<typeof mapDispatch> {
     onSuccess?: () => void,
@@ -59,18 +59,17 @@ const Login = (props: Props) => {
 
     return (
         <div>
-            <Blank vertical="5rem"></Blank>
-            <FlexVertical style={{ position: "relative" }}>
+            <FlexVertical style={{ position: "relative", marginTop: "5rem" }}>
                 {alertText &&
                     <div style={{ position: "absolute", top: "-4rem" }}>
                         <Alert onClick={() => setAlertText("")}>{alertText}</Alert>
                     </div>
                 }
-                <FormAligned style={CtnGray_style} data-testid="Form" onSubmit={onSubmit}>
+                <Form data-testid="Form" onSubmit={onSubmit} style={{padding: "1.5rem"}}>
                     <LabeledInput label="Username" onChange={setUsername}></LabeledInput>
                     <LabeledInput label="Password" onChange={setPassword}></LabeledInput>
                     <BtnGray type="submit" data-testid="submit">Login</BtnGray>
-                </FormAligned>
+                </Form>
             </FlexVertical>
         </div>
     );
