@@ -1,76 +1,117 @@
 import React, { useState, CSSProperties, useRef, useEffect } from 'react'
 import COLOR from '../constants/COLOR';
 
-
-interface Props {
-    placeholder?: string,
+type Props = {
+    /** Applied to both fixed and editable elements.
+     * You might not specify 'width' if you are using 'noWrap'
+     */
     style?: CSSProperties,
-    fixedStyle?: CSSProperties,
-    editableStyle?: CSSProperties,
+    /** You can get the current text, useful for saving after editing */
     onBlur?: (text: string) => void,
+    placeholder?: string,
+    /** Initial text (not a placeholder) */
     defaultText?: string,
-    text?: string,
-    hoverColor?: string
+    hoverColor?: string,
+    /** Limits the number of text characters */
+    maxLength?: number
 }
 
-const FixableTextArea = (props: Props) => {
-    if (props.text !== undefined && props.defaultText !== undefined) throw new Error("Can't pass 'text' and 'defaultText' as props at the same time. Choose one for the entire lifecycle");
 
-    const [localText, setLocalText] = useState(props.defaultText || props.text || "");
+const FixableTextArea = (props: Props) => {
+    const [localText, setLocalText] = useState(props.defaultText || "");
     const [isWritable, setIsWritable] = useState(false);
     const [isFixedBeingHovered, setIsFixedBeingHovered] = useState(false);
-    const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-
+    /** Used to handle imperative things like focus, text selections... */
+    const writableRef = useRef<HTMLTextAreaElement>(null);
+    
+    /** When the textarea appears, all its text must be selected */
     useEffect(() => {
-        if (isWritable && textAreaRef.current) {
-            textAreaRef.current.focus();
-            textAreaRef.current.setSelectionRange(0, textAreaRef.current.value.length);
+        if (isWritable && writableRef.current) {
+            writableRef.current.focus();
+            writableRef.current.setSelectionRange(0, writableRef.current.value.length);
         }
     }, [isWritable]);
 
-    useEffect(() => {
-        if (props.text === undefined) return;
-        setLocalText(props.text || "");
-    }, [props.text]);
+    /** when span is clicked */
+    const onClick = (e: React.MouseEvent<HTMLSpanElement>) => {
+        setIsWritable(true);
+        setIsFixedBeingHovered(false);
+    }
 
-    const onBlur = () => {
+    /** when textarea loses focus */
+    const onBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
         setIsWritable(false);
         props.onBlur && props.onBlur(localText);
     }
 
-
-    const defaultSpanStyle: CSSProperties = {
-        cursor: "pointer",
-        borderColor: isFixedBeingHovered ? props.hoverColor || "#D8D8D8" : "transparent",
-        borderStyle: "solid",
-        borderWidth: "2px",
-        padding: "0.3rem",
-        color: "#282828",
-        boxSizing: "border-box",
-        whiteSpace: "pre-wrap",
-        fontSize: "1.1rem"
+    /** when textarea changes */
+    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const value = e.currentTarget.value;
+        setLocalText(value);
     }
 
-    const defaultTextAreaStyle: CSSProperties = {
-        resize: "none",
+    /** --------------------------------------------------------------
+     * 
+     *                             STYLING
+     * 
+     * -------------------------------------------------------------- */
+
+    const DEFAULT_BORDER = {
+        hoverColor: "#D0D0D0",
+        borderColor: "transparent",
+        borderStyle: "solid",
+        borderWidth: "0.1rem"
+    }
+
+    const borderColorFromProps = props.style && (props.style.borderColor || (typeof props.style.border === "string" ? props.style.border.split(" ")[2] : undefined));
+    const borderColor = isFixedBeingHovered ? props.hoverColor || DEFAULT_BORDER.hoverColor : borderColorFromProps || DEFAULT_BORDER.borderColor;
+
+    const defaultOverwritableStyleForBoth : CSSProperties = {
+        // really important that padding, fontSize and borderWidth are the same for both
         padding: "0.3rem",
         fontSize: "1.1rem",
-        boxSizing: "border-box"
+        borderStyle: DEFAULT_BORDER.borderStyle,
+        borderWidth: DEFAULT_BORDER.borderWidth
     }
 
-    let spanStyle = Object.assign({}, defaultSpanStyle, props.style, props.fixedStyle);
-    if (localText === "") spanStyle.color = COLOR.placeholder;
+    let spanStyle: CSSProperties = {
+        /** Overwritable styling */
+        ...defaultOverwritableStyleForBoth,
+        ...(props.style || {}),
+        /** State-dependent styling */
+        color: localText === "" ? COLOR.placeholder : props.style && props.style.color || "#282828",
+        borderColor: borderColor,
+        /** Not overwritable styling */
+        cursor: "pointer",
+        boxSizing: "border-box",
+        whiteSpace: "pre-wrap",
+        /* when `props.noWrap` is true, 'display: block' guarantees that the div container will not be larger
+        than the textarea */
+        display: "block",
+    }
 
-    const textAreaStyle = Object.assign({}, defaultTextAreaStyle, props.style, props.editableStyle);
+    const textAreaStyle: CSSProperties = {
+        /** Overwritable styling */
+        ...defaultOverwritableStyleForBoth,
+        ...(props.style || {}),
+        /** Not overwritable styling */
+        resize: "none",
+        boxSizing: "border-box",
+        whiteSpace: "pre-wrap",
+        //overflow: props.noWrap ? "hidden" : "auto",
+        /* when `props.noWrap` is true, 'display: block' guarantees that the div container will not be larger
+        than the textarea */
+        display: "block"
+    }
 
-    return isWritable ?
-        <textarea data-testid="editable" ref={textAreaRef} style={textAreaStyle} value={localText} onBlur={onBlur} onChange={e => setLocalText(e.currentTarget.value)}></textarea>
-        :
-        <span data-testid="fixed" style={spanStyle} onMouseEnter={() => setIsFixedBeingHovered(true)} onMouseLeave={() => setIsFixedBeingHovered(false)} onClick={() => {
-            setIsWritable(true);
-        }}>{localText ? localText : props.placeholder}</span>
+    const writableJSX = <textarea ref={writableRef} data-testid="editable" style={textAreaStyle}
+        value={localText} onBlur={onBlur} onChange={onChange} maxLength={props.maxLength}></textarea>;
 
+    const fixedJSX = <span data-testid="fixed" style={spanStyle}
+        onMouseEnter={() => setIsFixedBeingHovered(true)} onMouseLeave={() => setIsFixedBeingHovered(false)}
+        onClick={onClick}>{localText ? localText : props.placeholder}</span>
+
+    return isWritable ? writableJSX : fixedJSX;
 }
 
 export default FixableTextArea;
