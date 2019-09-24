@@ -80,7 +80,7 @@ const setRoutes = (app: ReturnType<typeof express>, extra: {
     } else if (process.env.NODE_ENV === "production") {
         console.log("running in production");
 
-        app.use('/', express.static(path.resolve(__dirname, '../../build')));
+        app.use('/', express.static(path.resolve(global.__workspaceFolder, 'build')));
         app.use(serverRenderer as any);
 
     } else {

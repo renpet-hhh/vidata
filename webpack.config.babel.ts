@@ -11,7 +11,7 @@ const clientConfig: Configuration = {
     entry: clientEntry,
     output: {
         filename: "client.js",
-        path: 'C:\\Users\\renan\\OneDrive\\Documentos\\React\\VidataUniversal\\build',
+        path: path.resolve(global.__workspaceFolder, "build"),
         publicPath: "/"
     },
     devtool: "eval-source-map",
@@ -75,7 +75,7 @@ const serverConfig: Configuration = {
     entry: "./src/server/global-middlewares/serverRenderer.tsx",
     output: {
         filename: "server.js",
-        path: path.resolve("build"),
+        path: path.resolve(global.__workspaceFolder, "build"),
         libraryTarget: "commonjs2"
     },
     // @ts-ignore
