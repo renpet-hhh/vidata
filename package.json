@@ -6,9 +6,13 @@
   "scripts": {
     "test": "jest --verbose",
     "test:only": "jest --verbose --testPathPattern",
-    "build": "babel -o globals.js ./globals.ts && babel  -x .ts ./webpack.config.babel.ts -o ./webpack.config.js && babel --config-file ./.babelrc -x .js,.ts,.tsx src -d compiled",
-    "server": "env-cmd node ./compiled/server/index.js",
-    "start": "npm run build && npm run server"
+    "transpile": "babel -o globals.js ./globals.ts && babel -x .ts ./webpack.config.babel.ts -o ./webpack.config.js && babel --config-file ./.babelrc -x .js,.ts,.tsx src -d compiled",
+    "build:dev": "npm run transpile",
+    "build:prod": "npm run transpile && webpack",
+    "server": "node ./compiled/server/index.js",
+    "start:dev": "npm run build:dev && npm run server",
+    "start:prod": "npm run build:prod && npm run server",
+    "start": "env-cmd --use-shell \"if %NODE_ENV%==development (npm run start:dev) else (npm run start:prod)\""
   },
   "author": "",
   "license": "ISC",

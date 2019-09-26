@@ -2,6 +2,8 @@ import webpack, { Configuration } from "webpack";
 import nodeExternals from 'webpack-node-externals';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
+import './globals';
+
 
 const clientEntry = process.env.NODE_ENV === "production" ? ["eventsource-polyfill", "./src/index.tsx"] :
     ["eventsource-polyfill", "react-hot-loader/patch", "webpack-hot-middleware/client?path=/__webpack_hmr", "./src/index.tsx"];
