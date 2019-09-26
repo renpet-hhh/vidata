@@ -24,7 +24,6 @@ const hydrate = () => {
     ReactDOM.hydrate(RootWithLoadedState, document.getElementById("root"))
 }
 
-console.log("added listener to document");
 document.addEventListener('DOMContentLoaded', () => {
     hydrate();
 });

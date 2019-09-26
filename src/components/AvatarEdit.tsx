@@ -38,11 +38,8 @@ const AvatarEdit = (props: Props) => {
                     return;
                 }
                 setErrorMsg("");
-                console.log("sending file in client");
                 const res = await askSaveAvatar(file);
-                console.log("received dispatch order");
                 if (hasDispatchOrder(res)) {
-                    console.log("sending dispatch order");
                     props.dispatch(res.data.action);
                 }
             }

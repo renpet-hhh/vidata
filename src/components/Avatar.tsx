@@ -21,7 +21,6 @@ const Avatar = (props: Props) => {
     }, [props.errorMsg])
 
 
-    console.log("Avatar rendered");
 
     return (
         <Center style={{ width: props.length, height: props.length, backgroundColor: "black" }}>

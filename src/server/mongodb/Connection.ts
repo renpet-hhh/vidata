@@ -36,7 +36,7 @@ class Connection {
     }
 
     /** 
-    *  Returns a database wrapper around a unique connection that can be used for the entire application
+    *  Returns a database wrapper around a unique connection that can be used for the entire application.
     * Must be called only if Connection#initialize was already called before.
     */
     static get = () => {

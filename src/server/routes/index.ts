@@ -18,12 +18,13 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import { App } from '../../types/Request';
 import setStaticRoutes from '../global-middlewares/setStaticRoutes';
+import Connection from '../mongodb/Connection';
 
 
 const setRoutes = (app: ReturnType<typeof express>, extra: {
     upload: multer.Instance
 }) => {
-
+    
     /**  Global middlewares */
     app.use(loggerMiddleware);
     app.use(initSession);  // after initSession the `req.session` is guaranteed to be initialized
@@ -76,12 +77,14 @@ const setRoutes = (app: ReturnType<typeof express>, extra: {
 
         /** Updates serverRenderer to match the most recent client.js
          *  But does not listen to changes to server files, just the server side renderer */
-        app.use(webpackHotServerMiddleware(compiler));
+        app.use(webpackHotServerMiddleware(compiler, {serverRendererOptions: {
+            promiseDbWrapper: Connection.get()
+        }}));
     } else if (process.env.NODE_ENV === "production") {
         console.log("running in production");
 
         app.use('/', express.static(path.resolve(global.__workspaceFolder, 'build')));
-        app.use(serverRenderer as any);
+        app.use(serverRenderer({promiseDbWrapper: Connection.get()}) as any);
 
     } else {
         throw new Error("process.env.NODE_ENV is neither development nor production and that error wasn't catched before this function")

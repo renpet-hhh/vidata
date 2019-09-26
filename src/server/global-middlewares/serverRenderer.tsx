@@ -9,6 +9,12 @@ import { Response } from 'express';
 import configStore from '../../store/configStore';
 import translateStateToClient from '../utils/translateStateToClient';
 import { Request } from '../../types/Request';
+import DbWrapper from '../mongodb/DbWrapper';
+import fetchSession from '../utils/fetchSession';
+
+interface ServerRendererOptions {
+    promiseDbWrapper: Promise<DbWrapper>
+}
 
 /** Main response from the server
  * 
@@ -17,9 +23,13 @@ import { Request } from '../../types/Request';
  * Responses (status : body):
  * - 200 : *HTML*
  */
-const serverRenderer = () => async (req: Request, res: Response) => {
+const serverRenderer = (options: ServerRendererOptions) => async (req: Request, res: Response) => {
     const context = {};
     const sheet = new ServerStyleSheet();
+
+    if (req.session.logged) {
+        await fetchSession(req, req.session.profile!.username, await options.promiseDbWrapper);
+    }
 
     const store = configStore(await translateStateToClient(req));
     const AppWrapper = <Provider store={store}>

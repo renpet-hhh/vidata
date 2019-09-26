@@ -24,8 +24,6 @@ export const handleSignUp = async (req: Request, res: Response) => {
     const db = await Connection.get();
     const username = req.body.username;
     const password = req.body.password;
-    console.log("handleSignUp: " + username);
-    console.log("handleSignUp: " + password);
     try {
         await db.createUser(username, password, req.body.email);
     } catch (e) {
@@ -49,8 +47,6 @@ export const handleSignUp = async (req: Request, res: Response) => {
  *  */
 export const handleSignIn = async (req: Request, res: Response) => {
     const db = await Connection.get();
-    console.log("body");
-    console.log(req.body);
     const { username, password } = req.body;
     if (!username || !password) {
         res.status(400).send(RequestErr.SYNTAX_ERROR);
@@ -65,7 +61,6 @@ export const handleSignIn = async (req: Request, res: Response) => {
     }
     const isAuthenticated = await db.authenticateUserByUsername(username, password);
     if (isAuthenticated) {
-        console.log("OK, authenticated");
         req.session.logged = true; // user is marked as authenticated
         await fetchSession(req, username);
         res.status(200).send({ action: await actionLoginByReq(req) });
@@ -84,7 +79,6 @@ export const handleSignIn = async (req: Request, res: Response) => {
 export const handleLogout = async (req: Request, res: Response) => {
     if (req.session.logged) {
         resetSession(req);
-        console.log("session destroyed")
         res.status(200).send({ action: actionLogout() });
         return;
     };

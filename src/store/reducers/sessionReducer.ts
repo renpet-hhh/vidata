@@ -3,7 +3,7 @@ import { UserInfo } from "../../types/Profile";
 import { ServerSessionData } from "../../types/SessionData";
 import { AppState } from "../configStore";
 
-/** initial state is given by the server, this is here just in case something really bad happens */
+/** Initial state is given by the server, but the server uses this as reference */
 const INITIAL_STATE: AppState['session'] = {
     logged: false
 }

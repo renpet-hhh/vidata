@@ -23,8 +23,6 @@ const Collection = (props: Props) => {
     for (let i = 0; i < props.profile.collection.length; i += 2) {
         const firstImg = props.profile.collection[i];
         const secondImg = props.profile.collection[i + 1];
-        console.log(firstImg);
-        console.log(secondImg);
         const style : CSSProperties = {
             width: "50%",
             margin: "1rem"

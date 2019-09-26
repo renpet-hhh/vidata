@@ -37,15 +37,12 @@ export default class DbWrapper {
     }
 
     createUser = async (username: string, password: string, email: string) => {
-        console.log("creating user... " + username);
         const userExistsInDB = await this.userExists(username);
         if (userExistsInDB) throw new Error(RequestErr.ALREADY_USED_USERNAME);
         const emailExistsInDB = await this.emailExists(email);
         if (emailExistsInDB) throw new Error(RequestErr.ALREADY_USED_EMAIL);
-        console.log("hashing password...");
         const hashedPassword = await hash(password, 10);
         this._users.insertOne({ ..._DEFAULT_PROFILE, username: username, password: hashedPassword, email: email });
-        console.log("created!");
         return true;
     }
 
@@ -54,7 +51,6 @@ export default class DbWrapper {
      */
     authenticateUserByUsername = async (username: string, password: string) => {
         if (!username || !password) return false;
-        console.log("authenticating " + username);
         const userInDB = await this._users.findOne({ username: username }, { projection: { password: 1 } });
         if (userInDB === null) return false;
         return await compare(password, userInDB.password);
@@ -65,7 +61,6 @@ export default class DbWrapper {
      */
     authenticateUserByEmail = async (email: string, password: string) => {
         if (!(email || password)) return false;
-        console.log("authenticating " + email);
         const userInDB = await this._users.findOne({ email: email }, { projection: { password: 1 } });
         if (userInDB === null) return false;
         return await compare(password, userInDB.password);
@@ -83,7 +78,6 @@ export default class DbWrapper {
             $set: data
         });
         if (result.matchedCount === 0) throw new Error(RequestErr.USERNAME_NOT_FOUND);
-        console.log(result);
     }
 
     /**

@@ -62,7 +62,6 @@ describe('displays alert when authentication fails because of the', () => {
             mockAxios.mockError({ response: { status: 422, data: RequestErr.AUTHENTICATION_FAILED } });
         });
         await waitForElement(() => getByTestId("Alert-text"));
-        console.log("waited for element");
     });
 
     it('server', async () => {
