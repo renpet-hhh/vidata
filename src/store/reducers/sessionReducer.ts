@@ -1,11 +1,12 @@
 import { AnyAction } from "redux";
-import { UserInfo } from "../../types/Profile";
-import { ServerSessionData } from "../../types/SessionData";
 import { AppState } from "../configStore";
+import _ from 'lodash';
+import isArrayLike from "../../utils/isArrayLike";
 
 /** Initial state is given by the server, but the server uses this as reference */
 const INITIAL_STATE: AppState['session'] = {
-    logged: false
+    logged: false,
+    itemToBeEditedId: undefined
 }
 
 /**
@@ -17,6 +18,10 @@ const sessionReducer = (state = INITIAL_STATE, action: AnyAction): AppState['ses
             return { ...state, logged: true };
         case 'LOGOUT':
             return { ...state, logged: false };
+        case 'START_EDITING_COLLECTION':
+            return {...state, itemToBeEditedId: action.id};
+        case 'SAVE_COLLECTION':
+            return {...state, itemToBeEditedId: undefined};
         default:
             return state;
     }

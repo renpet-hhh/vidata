@@ -13,7 +13,7 @@ const fetchSession = async (req: Request, username: string, dbWrapper?: DbWrappe
     const db = dbWrapper ? dbWrapper : await Connection.get();
     const profile = await db.getProfile(username);
     if (profile) {
-        const avatarPath = path.join(path.resolve(global.__workspaceFolder, "files/images/avatar"), `${profile.username}.jpeg`)
+        const avatarPath = path.join(path.resolve(process.env.ROOT!, "files/images/avatar"), `${profile.username}.jpeg`)
         let outOfDBInfo: OutOfDBProfile = {
             lastModified: {
                 avatar: fs.existsSync(avatarPath) ? fs.statSync(avatarPath).mtime.getTime() : 0

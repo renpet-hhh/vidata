@@ -83,7 +83,7 @@ const setRoutes = (app: ReturnType<typeof express>, extra: {
     } else if (process.env.NODE_ENV === "production") {
         console.log("running in production");
 
-        app.use('/', express.static(path.resolve(global.__workspaceFolder, 'build')));
+        app.use('/', express.static(path.resolve(process.env.ROOT!, 'build')));
         app.use(serverRenderer({promiseDbWrapper: Connection.get()}) as any);
 
     } else {

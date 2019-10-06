@@ -11,7 +11,7 @@ import actionUpdateProfile from '../../../../../store/actions/profile/actionUpda
  * - 200 : **Dispatch Order**
  */
 export const handleSaveAvatar = async (req: Request, res: Response) => {
-    const avatarPath = path.join(path.resolve(global.__workspaceFolder, 'files/images/avatar'), `${req.session.profile!.username}.jpeg`);
+    const avatarPath = path.join(path.resolve(process.env.ROOT!, 'files/images/avatar'), `${req.session.profile!.username}.jpeg`);
     const stats = statSync(avatarPath);
     const lastModifiedTime = stats.mtime.getTime();
     req.session.profile!.lastModified.avatar = lastModifiedTime;

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Route, Redirect, Switch } from 'react-router';
 import { AppState } from './store/configStore';
 import { Dispatch } from 'redux';
-import { hot } from 'react-hot-loader/root';
 
 import Root from './pages/root';
 import $Profile from './pages/profile'
@@ -23,7 +22,6 @@ interface Props extends ReturnType<typeof mapState>, ReturnType<typeof mapDispat
  * Configures route logic and has access to all state
  */
 const App = (props: Props) => {
-
 
 
     return (
@@ -52,4 +50,4 @@ const mapDispatch = (dispatch: Dispatch) => ({
 /** 
  * Configures route logic and has access to all state (must be used with a Router and the Provider)
  */
-export default hot(connect(mapState, mapDispatch)(App));
+export default connect(mapState, mapDispatch)(App);

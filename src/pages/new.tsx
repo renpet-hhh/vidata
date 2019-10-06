@@ -36,7 +36,7 @@ const New = (props: Props) => {
     const save = () => {
         if (!getImageDataRef.current) return;
         const imageData = getImageDataRef.current();
-        if (props.collection) {
+        if (props.collection.length > 0) {
             props.dispatch(actionUpdateProfile({ collection: [...props.collection, imageData.data] }));
         } else {
             props.dispatch(actionUpdateProfile({ collection: [imageData.data] }));

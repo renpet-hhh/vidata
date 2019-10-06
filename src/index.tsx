@@ -4,14 +4,9 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import configStore from './store/configStore';
-import { setConfig } from 'react-hot-loader';
-
-setConfig({ logLevel: 'debug' });
 
 
-// @ts-ignore
 const store = configStore(window.__PRELOADED_STATE__);
-// @ts-ignore
 delete window.__PRELOADED_STATE__;
 
 
@@ -24,8 +19,20 @@ const hydrate = () => {
     ReactDOM.hydrate(RootWithLoadedState, document.getElementById("root"))
 }
 
+if (module.hot) {
+    module.hot.accept('./App', () => {
+        console.log("Change detected, re-hydrating...");
+        hydrate();
+    })
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    hydrate();
+    if (!window.__notFirstLoad) {
+        console.log("Hydrating for the first time");
+        hydrate();
+        window.__notFirstLoad = true;
+    }
 });
 
 

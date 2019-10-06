@@ -1,7 +1,8 @@
-import { createStore, Store, AnyAction } from 'redux';
+import { createStore, Store, AnyAction, Action } from 'redux';
 import rootReducer from './reducers/rootReducer';
 import { ClientExclusiveSessionData } from '../types/SessionData';
 import { UserInfo } from '../types/Profile';
+import { devToolsEnhancer, EnhancerOptions } from 'redux-devtools-extension';
 
 export interface AppState {
     session: ClientExclusiveSessionData,
@@ -18,33 +19,32 @@ export interface AppState {
 
 const configStore = (initialState?: AppState): Store<AppState> => {
     let isInClient = typeof window !== "undefined";
-    const actionSanitizer = (action: AnyAction) => {
+    const actionSanitizer : any = (action : AnyAction) => {
         const sanitizedAction = Object.assign({}, action);
         if (action.type === "UPDATE") {
             if (action.merge.collection) {
-                sanitizedAction.merge.collection = [];
+                sanitizedAction.merge.collection = {};
             }
         }
         if (action.type === "LOGIN") {
             if (action.profile.collection) {
-                sanitizedAction.profile.collection = [];
+                sanitizedAction.profile.collection = {};
             }
         }
         return sanitizedAction;
     }
-    const stateSanitizer = (state: AppState) => {
-        const sanitizedState : any = Object.assign({}, state);
+    const stateSanitizer : any = (state : AppState) => {
+        const sanitizedState = Object.assign({}, state);
         if (state.profile) {
             if (state.profile.collection) {
-                sanitizedState.profile.collection = [];
+                sanitizedState.profile.collection = {};
             }
         }
         return sanitizedState;
     }
     const store: Store<AppState> = createStore(rootReducer, initialState,
         isInClient ?
-        // @ts-ignore : Enables redux devtools extension
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({actionSanitizer, stateSanitizer}) : undefined);
+        devToolsEnhancer({actionSanitizer, stateSanitizer}) : undefined);
 
     return store;
 }

@@ -3,7 +3,7 @@
         "target": "es2015",
         "noEmit": true,
         "jsx": "react",
-        "allowJs": false,
+        "allowJs": true,
         "esModuleInterop": true,
         "alwaysStrict": true,
         "forceConsistentCasingInFileNames": true,
@@ -12,8 +12,11 @@
         "strict": true,
         "moduleResolution": "node",
         "types": [
-            "react",
-            "jest" // necessary because react-native won't be used (I think)
+            "react", // necessary because react-native won't be used (I think)
+            "jest",
+            "webpack-env",
+            "node"
         ]
     }
+    //"files": ["globals.d.ts"]
 }

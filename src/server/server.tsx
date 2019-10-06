@@ -5,8 +5,7 @@ import connectMongo from 'connect-mongo';
 import Connection from './mongodb/Connection';
 import multer from 'multer';
 import RequestErr from '../constants/RequestErr';
-import setRoutes from './routes';
-import '../../globals';
+import setRoutes from './routes/setRoutes';
 
 
 const MongoStore = connectMongo(session);

@@ -3,8 +3,8 @@ import Connection from '../../../../mongodb/Connection';
 import RequestErr from '../../../../../constants/RequestErr';
 import resetSession from '../../../../utils/resetSession';
 import fetchSession from '../../../../utils/fetchSession';
-import actionLogout from '../../../../../store/actions/session/actionLogout';
-import actionLoginByReq from '../../../../../store/actions/session/actionLoginByReq';
+import actionLogout from '../../../../../store/actions/common/actionLogout';
+import actionLoginByReq from '../../../../../store/actions/common/actionLoginByReq';
 
 /**
  * Adds a user account to the database, if requirements are met

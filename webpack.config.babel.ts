@@ -2,18 +2,16 @@ import webpack, { Configuration } from "webpack";
 import nodeExternals from 'webpack-node-externals';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
-import './globals';
-
 
 const clientEntry = process.env.NODE_ENV === "production" ? ["eventsource-polyfill", "./src/index.tsx"] :
-    ["eventsource-polyfill", "react-hot-loader/patch", "webpack-hot-middleware/client?path=/__webpack_hmr", "./src/index.tsx"];
+    ["eventsource-polyfill", "webpack-hot-middleware/client?name=client", "./src/index.tsx"];
 
 const clientConfig: Configuration = {
     name: 'client',
     entry: clientEntry,
     output: {
         filename: "client.js",
-        path: path.resolve(global.__workspaceFolder, "build"),
+        path: path.resolve(process.env.ROOT!, "build"),
         publicPath: "/"
     },
     devtool: "eval-source-map",
@@ -58,10 +56,7 @@ const clientConfig: Configuration = {
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.jsx', '.js'],
-        alias: {
-            'react-dom': '@hot-loader/react-dom'
-        }
+        extensions: ['.tsx', '.ts', '.jsx', '.js']
     },
     plugins: [
         new MiniCssExtractPlugin({
@@ -77,7 +72,7 @@ const serverConfig: Configuration = {
     entry: "./src/server/global-middlewares/serverRenderer.tsx",
     output: {
         filename: "server.js",
-        path: path.resolve(global.__workspaceFolder, "build"),
+        path: path.resolve(process.env.ROOT!, "build"),
         libraryTarget: "commonjs2"
     },
     // @ts-ignore
