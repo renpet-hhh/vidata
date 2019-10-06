@@ -3,7 +3,8 @@ import { UserInfo } from "./Profile";
 /** Non-account-persistent data exclusivet to the client side */
 export interface ClientExclusiveSessionData {
     /** Whether the user is logged in */
-    logged: boolean
+    logged: boolean,
+    itemToBeEditedId?: string
 }
 
 

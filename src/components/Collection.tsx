@@ -19,19 +19,25 @@ const StyledFlexVertical = styled(CtnGray)`
 const Collection = (props: Props) => {
     const [seeMore, setSeeMore] = useState(false);
 
+    
+    const itemStyle : CSSProperties = {
+        width: "50%",
+        margin: "1rem"
+    }
+    const galleryItems = [];
+    for (const id in props.collection) {
+        const imageData = new ImageData(props.collection[id], 500, 500);
+        galleryItems.push(
+            <GalleryItem id={id} key={id} imageData={imageData} style={itemStyle}></GalleryItem>
+        );
+    }
     const rowsJSX = [];
-    for (let i = 0; i < props.profile.collection.length; i += 2) {
-        const firstImg = props.profile.collection[i];
-        const secondImg = props.profile.collection[i + 1];
-        const style : CSSProperties = {
-            width: "50%",
-            margin: "1rem"
-        }
+    for (let i = 0; i < galleryItems.length; i += 2) {
         // TODO: CHANGE INDEX BASED KEY TO HASHED
         rowsJSX.push(
             <FlexHorizontalBetween style={{ width: "100%" }} key={i}>
-                {firstImg && <GalleryItem style={style} imageData={new ImageData(firstImg, 500, 500)}></GalleryItem>}
-                {secondImg ? <GalleryItem style={style} imageData={new ImageData(secondImg, 500, 500)}></GalleryItem> : <div style={style}></div>}
+                {galleryItems[i]}
+                {galleryItems[i + 1] || <div style={itemStyle}></div>}
             </FlexHorizontalBetween>
         );
         if (!seeMore) break;
@@ -48,7 +54,7 @@ const Collection = (props: Props) => {
 }
 
 const mapState = (state : AppState) => ({
-    profile: state.profile
+    collection: state.profile.collection
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({

@@ -1,22 +1,23 @@
-import React, { useRef, useEffect, CSSProperties } from 'react'
+import React, { useRef, CSSProperties } from 'react'
+import useCanvasUpdate from '../hooks/useCanvasUpdate';
 
 
-interface Props extends React.HTMLAttributes<HTMLCanvasElement> {
+interface Props {
     imageData: ImageData,
     style?: CSSProperties
 };
 
 const StaticCanvas = (props: Props) => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const {imageData, ...PROPS} = props;
-    useEffect(() => {
-        if (canvasRef.current) {
-            const ctx = canvasRef.current.getContext("2d")!
-            ctx.putImageData(imageData, 0, 0);
-        }
-    }, [canvasRef.current]);
+    const canvas = document.createElement("canvas");
+    if (props.imageData) {
+        canvas.height = props.imageData.height;
+        canvas.width = props.imageData.width;
+        const ctx = canvas.getContext("2d")!;
+        ctx.putImageData(props.imageData, 0, 0);
+    }
+    const imgUrl = canvas.toDataURL();
     return (
-        <canvas {...PROPS} width={imageData.width} height={imageData.height} ref={canvasRef}></canvas>
+        imgUrl ? <img style={props.style} src={imgUrl}></img> : null
     );
 };
 

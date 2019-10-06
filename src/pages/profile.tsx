@@ -38,7 +38,7 @@ const Profile = (props: Props) => {
                         <FixableTextArea onBlur={bioText => askSaveProfile(props.dispatch, { bioText })} defaultText={props.profile.bioText} style={{width: "100%", height: "8rem", margin: "1rem", padding: "1rem"}} placeholder="Tell us about you!"></FixableTextArea>
                     </FlexHorizontal>
                     <header style={headerStyle}>Collection</header>
-                    {props.profile.collection.length > 0 ? <Collection/> : <NothingSoFar/>}
+                    {Object.keys(props.profile.collection).length > 0 ? <Collection/> : <NothingSoFar/>}
                     <header style={headerStyle}>Awards</header>
                     {props.profile.awards.length > 0 ? <NothingSoFar/> : <NothingSoFar/>}
                 </FlexVertical>

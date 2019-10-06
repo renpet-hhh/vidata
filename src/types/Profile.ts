@@ -4,7 +4,7 @@ export interface DBProfile {
     password: string,
     email: string,
     bioText: string,
-    collection: Uint8ClampedArray[],
+    collection: {[id: string]: Uint8ClampedArray},
     awards: any[]
 }
 
