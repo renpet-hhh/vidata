@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { PaintMethods } from './Paint';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -8,6 +8,7 @@ import { PaintGray } from './styled/components';
 import ScrollerController from './ScrollerController';
 import useToggle from '../hooks/useToggle';
 import { BtnGray } from './styled/buttons';
+import ColorPalette from './ColorPalette';
 
 interface Props extends ReturnType<typeof mapState>, ReturnType<typeof mapDispatch> {
     width: number,
@@ -39,6 +40,7 @@ const PaintEditor = (props: Props) => {
             <BtnGray onClick={() => paintRef.current && paintRef.current.redo()}>Redo</BtnGray>
             <BtnGray onClick={save}>Save</BtnGray>
             <ScrollerController width={200} height={2} radius={5} value={radius} onChange={setRadius} label="Radius" range={[0, 20]}></ScrollerController>
+            <ColorPalette value={color} onChange={setColor} label="Color"></ColorPalette>
         </div>
     );
 };
