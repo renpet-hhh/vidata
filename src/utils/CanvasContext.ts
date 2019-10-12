@@ -23,6 +23,14 @@ class CanvasContext {
         this.ctx.globalCompositeOperation = "source-over";
     }
 
+    getPixelColor = (x: number, y: number) => {
+        const imgData = this.ctx.getImageData(x, y, 1, 1);
+        const r = imgData.data[0];
+        const g = imgData.data[1];
+        const b = imgData.data[2];
+        const a = imgData.data[3];
+        return `rgba(${r}, ${g}, ${b}, ${a})`;
+    }
 }
 
 export default CanvasContext;

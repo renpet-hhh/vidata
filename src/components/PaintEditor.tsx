@@ -19,9 +19,9 @@ interface Props extends ReturnType<typeof mapState>, ReturnType<typeof mapDispat
 }
 
 const PaintEditor = (props: Props) => {
+    const [mode, setMode] = useState<"normal" | "erase" | "getColor">("normal");
     const [color, setColor] = useState<string>("black");
     const [radius, setRadius] = useState<number>(5);
-    const [eraseActive, toggleEraseActive] = useToggle(false);
     const paintRef = useRef<PaintMethods>(null);
 
     const save = () => {
@@ -32,10 +32,18 @@ const PaintEditor = (props: Props) => {
         }
     }
 
+    const onClickErase = () => {
+        mode === "erase" ? setMode("normal") : setMode("erase");
+    }
+    const onClickGetColor = () => {
+        mode === "getColor" ? setMode("normal") : setMode("getColor");
+    }
+
     return (
         <div className={props.className}>
-            <PaintGray ref={paintRef} initialImageData={props.initialImageData} color={color} radius={radius} width={props.width} height={props.height} erase={eraseActive}></PaintGray>
-            <BtnGray onClick={toggleEraseActive} style={{backgroundColor: eraseActive ? "#222222" : undefined}}>Erase</BtnGray>
+            <PaintGray ref={paintRef} initialImageData={props.initialImageData} color={color} radius={radius} width={props.width} height={props.height} mode={mode} listeners={{getColor: color => setColor(color)}}></PaintGray>
+            <BtnGray onClick={onClickErase} style={{backgroundColor: mode === "erase" ? "#222222" : undefined}}>Erase</BtnGray>
+            <BtnGray onClick={onClickGetColor} style={{backgroundColor: mode === "getColor" ? "#222222" : undefined}}>Get color</BtnGray>
             <BtnGray onClick={() => paintRef.current && paintRef.current.undo()}>Undo</BtnGray>
             <BtnGray onClick={() => paintRef.current && paintRef.current.redo()}>Redo</BtnGray>
             <BtnGray onClick={save}>Save</BtnGray>

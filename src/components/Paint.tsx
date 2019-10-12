@@ -15,12 +15,16 @@ interface Props {
     style?: CSSProperties,
     radius?: number,
     color?: string,
-    erase?: boolean,
+    mode?: "erase" | "getColor" | "normal",
+    listeners?: {
+        getColor: (color: string) => void
+    }
     // styled-components
     className?: string
 };
 
-const DEFAULTS = {
+const DEFAULTS : {mode: "normal", radius: 5, color: "black"} = {
+    mode: "normal",
     radius: 5,
     color: "black"
 }
@@ -62,6 +66,7 @@ const Paint = React.forwardRef((props: Props, ref : Ref<PaintMethods>) => {
     /** Blank ImageData */
     const blank = useRef<ImageData>();
 
+    const mode = props.mode !== undefined ? props.mode : DEFAULTS.mode;
     const radius = props.radius !== undefined ? props.radius : DEFAULTS.radius
     const color = props.color !== undefined ? props.color : DEFAULTS.color;
 
@@ -137,26 +142,41 @@ const Paint = React.forwardRef((props: Props, ref : Ref<PaintMethods>) => {
         return { x, y };
     }
     const onMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-        history.push(imageData);
-        historyTrash.reset();
-        const { x, y } = getClickPosition(e);
-        const ctxWrapper = getCtxWrapper();
-        props.erase ? ctxWrapper.eraseCircle(x, y) : ctxWrapper.drawCircle(x, y);
-        setIsDragging(true);
+        if (mode === "normal" || mode === "erase") {
+            history.push(imageData);
+            historyTrash.reset();
+            const { x, y } = getClickPosition(e);
+            const ctxWrapper = getCtxWrapper();
+            mode === "erase" ? ctxWrapper.eraseCircle(x, y) : ctxWrapper.drawCircle(x, y);
+            setIsDragging(true);
+        }
     }
     const onMouseMove = !isDragging ? undefined : (e: React.MouseEvent<HTMLCanvasElement>) => {
-        const { x, y } = getClickPosition(e);
-        const ctxWrapper = getCtxWrapper();
-        props.erase ? ctxWrapper.eraseCircle(x, y) : ctxWrapper.drawCircle(x, y);
+        if (mode === "normal" || mode === "erase") {
+            const { x, y } = getClickPosition(e);
+            const ctxWrapper = getCtxWrapper();
+            mode === "erase" ? ctxWrapper.eraseCircle(x, y) : ctxWrapper.drawCircle(x, y);
+        }
+    }
+    const onClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        if (mode === "getColor") {
+            const { x, y } = getClickPosition(e);
+            const ctxWrapper = getCtxWrapper();
+            const color = ctxWrapper.getPixelColor(x, y);
+            props.listeners && props.listeners.getColor(color);
+        }
     }
     const cancelDrag = () => {
-        if (!isDragging) return;
-        setIsDragging(false);
-        setImageData(_getImageData());
+        if (mode === "normal" || mode === "erase") {
+            if (!isDragging) return;
+            setIsDragging(false);
+            setImageData(_getImageData());
+        }
     }
     return (
-        <canvas ref={canvasRef} onMouseDown={onMouseDown} onMouseUp={cancelDrag} onMouseLeave={cancelDrag} onMouseMove={onMouseMove}
-                style={props.style} width={props.width} height={props.height} className={props.className}
+        <canvas ref={canvasRef} onMouseDown={onMouseDown} onMouseUp={cancelDrag} onMouseLeave={cancelDrag}
+            onMouseMove={onMouseMove} onClick={onClick}
+            style={props.style} width={props.width} height={props.height} className={props.className}
                 data-testid="Paint"></canvas>
     );
 });

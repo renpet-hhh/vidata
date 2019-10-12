@@ -32,6 +32,11 @@ export default function ColorPalette(props: Props) {
     const [show, setShow] = useState(false);
     const didMount = useMountRef();
 
+    /** Sync props.value and inputValue */
+    useEffect(() => {
+        setInputValue(props.value);
+    }, [props.value]);
+
 
     // When baseColor changes, create/change the tone selector
     useEffect(() => {

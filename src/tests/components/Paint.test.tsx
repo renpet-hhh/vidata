@@ -82,15 +82,26 @@ it('draws correct radius', () => {
 });
 
 it('erases', () => {
-    const { getByTestId, rerender } = render(<Paint width={10} height={10} color="#123456" erase={false}></Paint>);
+    const { getByTestId, rerender } = render(<Paint width={10} height={10} color="#123456"></Paint>);
     act(() => {
         fireEvent.mouseDown(getByTestId("Paint"), {clientX: 2, clientY: 2});
     });
-    rerender(<Paint width={10} height={10} color="#123456" erase={true}></Paint>);
+    rerender(<Paint width={10} height={10} color="#123456" mode="erase"></Paint>);
     act(() => {
         fireEvent.mouseMove(getByTestId("Paint"), {clientX: 3, clientY: 3});
     });
     // @ts-ignore
     const ctx : CanvasRenderingContext2D = getByTestId("Paint").getContext("2d");
     expect(ctx.__getEvents()).toMatchSnapshot("should have erased at (3, 3)");
+});
+
+it('gets color in empty canvas', () => {
+    // can't test for actual behavior
+    const getColorListener = jest.fn();
+    const { getByTestId } = render(<Paint width={10} height={10} color="#234567" mode="getColor" listeners={{getColor: getColorListener}}></Paint>);
+    act(() => {
+        fireEvent.click(getByTestId("Paint"), {clientX: 5, clientY: 5});
+    });
+    expect(getColorListener).toHaveBeenCalledTimes(1);
+    expect(getColorListener).toHaveBeenLastCalledWith("rgba(0, 0, 0, 0)");
 });
