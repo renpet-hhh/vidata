@@ -41,19 +41,29 @@ const DEFAULTS : {mode: "normal", radius: 5, color: "black"} = {
  * }
  * ```
  * 
+ * And access to other actions by `listeners`:
+ * ```
+ * {
+ *      getColor // called when user clicks at Paint while 'mode' is 'getColor'
+ * }
+ * ```
+ * 
  * @example
  * const Parent = () => {
  *      const paintRef = useRef<PaintMethods>(null);
  *      const undo = () => paintRef.current && paintRef.current.undo();
+ *      const getColorListener = (color: string) => console.log("user selected " + color);
  *      return (
  *          <div>
- *              <Paint ref={paintRef} width={200} height={200}></Paint>
+ *              <Paint ref={paintRef} width={200} height={200} listeners={{getColor: getColorListener}}></Paint>
  *              <button onClick={undo}>Undo</button>
  *          </div>
  *      );
  * };
 */
 const Paint = React.forwardRef((props: Props, ref : Ref<PaintMethods>) => {
+    if (props.style && props.style.padding !== undefined) console.warn("Paint doesn't support padding. Drawing will be out of place");
+
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     /** Stack for REDO */
@@ -65,6 +75,7 @@ const Paint = React.forwardRef((props: Props, ref : Ref<PaintMethods>) => {
     const [imageData, setImageData] = useState<ImageData>();
     /** Blank ImageData */
     const blank = useRef<ImageData>();
+    const CanvasCTXRef = useRef<CanvasContext>();
 
     const mode = props.mode !== undefined ? props.mode : DEFAULTS.mode;
     const radius = props.radius !== undefined ? props.radius : DEFAULTS.radius
@@ -85,7 +96,10 @@ const Paint = React.forwardRef((props: Props, ref : Ref<PaintMethods>) => {
     }
 
     const getCtxWrapper = () => {
-        return new CanvasContext(canvasRef.current!.getContext("2d")!, color, radius);
+        if (!CanvasCTXRef.current) {
+            CanvasCTXRef.current = new CanvasContext(canvasRef.current!.getContext("2d")!, color, radius);
+        }
+        return CanvasCTXRef.current.update(color, radius);
     }
 
     /** Always use the `imageData` state hook when possible */
@@ -134,11 +148,8 @@ const Paint = React.forwardRef((props: Props, ref : Ref<PaintMethods>) => {
     const getClickPosition = (e: React.MouseEvent<HTMLCanvasElement>) => {
         if (!canvasRef.current) throw new Error("Tried to get click position in non existent canvas element");
         const RECT = canvasRef.current.getBoundingClientRect();
-        const canvasStyles = window.getComputedStyle(canvasRef.current);
-        const paddingLeft = parseFloat(canvasStyles.getPropertyValue("padding-left")) || 0;
-        const paddingTop = parseFloat(canvasStyles.getPropertyValue("padding-top")) || 0;
-        const x = e.clientX - RECT.left - paddingLeft;
-        const y = e.clientY - RECT.top - paddingTop;
+        const x = e.clientX - RECT.left;
+        const y = e.clientY - RECT.top;
         return { x, y };
     }
     const onMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -152,10 +163,16 @@ const Paint = React.forwardRef((props: Props, ref : Ref<PaintMethods>) => {
         }
     }
     const onMouseMove = !isDragging ? undefined : (e: React.MouseEvent<HTMLCanvasElement>) => {
-        if (mode === "normal" || mode === "erase") {
+        if (mode === "normal") {
             const { x, y } = getClickPosition(e);
             const ctxWrapper = getCtxWrapper();
-            mode === "erase" ? ctxWrapper.eraseCircle(x, y) : ctxWrapper.drawCircle(x, y);
+            ctxWrapper.drawLineTo(x, y);
+            ctxWrapper.drawCircle(x, y);
+        } else if (mode === "erase") {
+            const { x, y } = getClickPosition(e);
+            const ctxWrapper = getCtxWrapper();
+            ctxWrapper.eraseLineTo(x, y);
+            ctxWrapper.eraseCircle(x, y);
         }
     }
     const onClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -171,6 +188,8 @@ const Paint = React.forwardRef((props: Props, ref : Ref<PaintMethods>) => {
             if (!isDragging) return;
             setIsDragging(false);
             setImageData(_getImageData());
+            const ctxWrapper = getCtxWrapper();
+            ctxWrapper.resetPosition();
         }
     }
     return (

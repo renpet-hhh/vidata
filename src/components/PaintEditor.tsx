@@ -6,7 +6,6 @@ import { AppState } from '../store/configStore';
 import actionSaveCollection from '../store/actions/common/actionSaveCollection';
 import { PaintGray } from './styled/components';
 import ScrollerController from './ScrollerController';
-import useToggle from '../hooks/useToggle';
 import { BtnGray } from './styled/buttons';
 import ColorPalette from './ColorPalette';
 
@@ -38,10 +37,13 @@ const PaintEditor = (props: Props) => {
     const onClickGetColor = () => {
         mode === "getColor" ? setMode("normal") : setMode("getColor");
     }
+    const getColorListener = (color: string) => {
+        setColor(color);
+    }
 
     return (
         <div className={props.className}>
-            <PaintGray ref={paintRef} initialImageData={props.initialImageData} color={color} radius={radius} width={props.width} height={props.height} mode={mode} listeners={{getColor: color => setColor(color)}}></PaintGray>
+            <PaintGray ref={paintRef} initialImageData={props.initialImageData} color={color} radius={radius} width={props.width} height={props.height} mode={mode} listeners={{getColor: getColorListener}}></PaintGray>
             <BtnGray onClick={onClickErase} style={{backgroundColor: mode === "erase" ? "#222222" : undefined}}>Erase</BtnGray>
             <BtnGray onClick={onClickGetColor} style={{backgroundColor: mode === "getColor" ? "#222222" : undefined}}>Get color</BtnGray>
             <BtnGray onClick={() => paintRef.current && paintRef.current.undo()}>Undo</BtnGray>
