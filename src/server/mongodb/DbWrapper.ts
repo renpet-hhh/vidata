@@ -9,7 +9,7 @@ const _DEFAULT_PROFILE: Omit<DBProfile, "_id"> = {
     password: "",
     email: "",
     bioText: "",
-    collection: [],
+    collection: {},
     awards: []
 }
 

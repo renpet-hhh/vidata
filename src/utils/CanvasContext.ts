@@ -1,3 +1,5 @@
+import rgbaToHex from "./rgbaToHex";
+
 class CanvasContext {
     private ctx : CanvasRenderingContext2D;
     private color: string;
@@ -60,13 +62,22 @@ class CanvasContext {
         return this;
     }
 
-    getPixelColor = (x: number, y: number) => {
+    getPixelColor = (x: number, y: number, encode: "rgba" | "hex" = "rgba") => {
         const imgData = this.ctx.getImageData(x, y, 1, 1);
         const r = imgData.data[0];
         const g = imgData.data[1];
         const b = imgData.data[2];
         const a = imgData.data[3];
-        return `rgba(${r}, ${g}, ${b}, ${a})`;
+        if (encode === "rgba") {
+            return `rgba(${r}, ${g}, ${b}, ${a})`;
+        } else if (encode === "hex") {
+            return rgbaToHex(r, g, b, a);
+        }
+        throw new Error(`encoding ${encode} not supported`);
+    }
+
+    fill = (x: number, y: number) => {
+        
     }
 }
 

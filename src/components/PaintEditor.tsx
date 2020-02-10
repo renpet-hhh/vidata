@@ -48,6 +48,7 @@ const PaintEditor = (props: Props) => {
             <BtnGray onClick={onClickGetColor} style={{backgroundColor: mode === "getColor" ? "#222222" : undefined}}>Get color</BtnGray>
             <BtnGray onClick={() => paintRef.current && paintRef.current.undo()}>Undo</BtnGray>
             <BtnGray onClick={() => paintRef.current && paintRef.current.redo()}>Redo</BtnGray>
+            <BtnGray onClick={() => paintRef.current && paintRef.current.clear()}>Clear</BtnGray>
             <BtnGray onClick={save}>Save</BtnGray>
             <ScrollerController width={200} height={2} radius={5} value={radius} onChange={setRadius} label="Radius" range={[0, 20]}></ScrollerController>
             <ColorPalette value={color} onChange={setColor} label="Color"></ColorPalette>
