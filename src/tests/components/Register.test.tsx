@@ -13,6 +13,8 @@ let onSuccess: jest.Mock;
 let store: MockStore;
 
 beforeEach(async () => {
+    jest.useFakeTimers();
+
     onSuccess = jest.fn();
     store = mockStore();
 
@@ -26,7 +28,6 @@ beforeEach(async () => {
     email = getByLabelText(/e-?mail/i);
     submitButton = getByText(/sign up|register|create an account/i);
 
-    jest.useFakeTimers();
 });
 
 afterEach(() => {
@@ -44,7 +45,7 @@ const setupFieldsAndReceiveResponse = async () => {
         fireEvent.change(email, { target: { value: "dummy@dummy" } });
     });
     await act(async () => {
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
         mockAxios.mockResponse({ status: 200, data: true }); // /api/db/exists
     });
 }
