@@ -1,13 +1,13 @@
 import rgbaToHex from "./rgbaToHex";
 
 class CanvasContext {
-    private ctx : CanvasRenderingContext2D;
+    private ctx: CanvasRenderingContext2D;
     private color: string;
     private radius: number;
     private lastX?: number;
     private lastY?: number;
 
-    constructor(ctx : CanvasRenderingContext2D, color: string, radius: number) {
+    constructor(ctx: CanvasRenderingContext2D, color: string, radius: number) {
         this.ctx = ctx;
         this.color = color;
         this.radius = radius;
@@ -77,7 +77,7 @@ class CanvasContext {
     }
 
     fill = (x: number, y: number) => {
-        
+
     }
 }
 

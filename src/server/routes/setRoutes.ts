@@ -91,9 +91,11 @@ const setRoutes = (app: ReturnType<typeof express>) => {
 
         /** Updates serverRenderer to match the most recent client.js
          *  But does not listen to changes to server files, just the server side renderer */
-        app.use(webpackHotServerMiddleware(compiler, {serverRendererOptions: {
-            promiseDbWrapper: Connection.get()
-        }}));
+        app.use(webpackHotServerMiddleware(compiler, {
+            serverRendererOptions: {
+                promiseDbWrapper: Connection.getDb()
+            }
+        }));
     } else if (process.env.NODE_ENV === "production") {
         console.log("running in production");
 

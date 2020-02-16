@@ -19,9 +19,9 @@ const sessionReducer = (state = INITIAL_STATE, action: AnyAction): AppState['ses
         case 'LOGOUT':
             return { ...state, logged: false };
         case 'START_EDITING_COLLECTION':
-            return {...state, itemToBeEditedId: action.id};
+            return { ...state, itemToBeEditedId: action.id };
         case 'SAVE_COLLECTION':
-            return {...state, itemToBeEditedId: undefined};
+            return { ...state, itemToBeEditedId: undefined };
         default:
             return state;
     }

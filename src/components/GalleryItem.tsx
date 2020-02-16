@@ -23,18 +23,18 @@ const GalleryItem = (props: Props) => {
 
     /** STYLES */
 
-    const hoverStyle : CSSProperties = {
+    const hoverStyle: CSSProperties = {
         backgroundColor: "rgba(0, 0, 0, 0.1)"
     }
-    const defaultStyle : CSSProperties = {
+    const defaultStyle: CSSProperties = {
         position: "relative",
         boxSizing: "border-box"
     }
-    const style : CSSProperties = Object.assign({}, defaultStyle, props.style, isHovering ? hoverStyle : {});
+    const style: CSSProperties = Object.assign({}, defaultStyle, props.style, isHovering ? hoverStyle : {});
 
     return (
         <div style={style} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
-            {isHovering && <Button onClick={onEdit} style={{ position: "absolute", bottom: "5%", left: "50%", transform: "translate(-50%, 0)"}}>Edit</Button>}
+            {isHovering && <Button onClick={onEdit} style={{ position: "absolute", bottom: "5%", left: "50%", transform: "translate(-50%, 0)" }}>Edit</Button>}
             <StaticCanvas imageData={props.imageData} style={{ width: "100%", display: "block" }} />
             {redirectTo && <Redirect to={redirectTo}></Redirect>}
         </div>

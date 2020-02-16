@@ -6,9 +6,9 @@ interface Props {
     y: number
 }
 /** A text balloon absolutely positioned */
-const Balloon = (props : Props) => {
+const Balloon = (props: Props) => {
     /** Non-physical container which specifies position */
-    const container : CSSProperties = {
+    const container: CSSProperties = {
         position: 'absolute',
         left: props.x,
         top: props.y,
@@ -16,7 +16,7 @@ const Balloon = (props : Props) => {
         pointerEvents: "none"
     }
     /** Container for the text and used as positional reference by the triangle */
-    const rectangle : CSSProperties = {
+    const rectangle: CSSProperties = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -28,7 +28,7 @@ const Balloon = (props : Props) => {
         padding: 5,
         minWidth: 20
     }
-    const triangle : CSSProperties = {
+    const triangle: CSSProperties = {
         position: "absolute",
         left: "50%",
         bottom: 0,
@@ -39,7 +39,7 @@ const Balloon = (props : Props) => {
         border: "solid 2px black",
         zIndex: -1
     }
-    const p : CSSProperties = {
+    const p: CSSProperties = {
         margin: 5
     }
     return (

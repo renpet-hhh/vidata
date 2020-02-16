@@ -17,7 +17,7 @@ const translateStateToClient = async (req: Request): Promise<AppState> => {
      * we are preloading the initial state of all other reducers too, for consistency */
     const defaultClientState = rootReducer(undefined, { type: '_dummy_' });
     const clientState = _.merge({}, defaultClientState, { session: SESSION, profile: profile });
-    
+
     return clientState;
 }
 

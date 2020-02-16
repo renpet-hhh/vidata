@@ -35,12 +35,12 @@ const Profile = (props: Props) => {
                     <span style={{ fontSize: "1.9rem", marginBottom: "2rem" }}>{props.profile.username}</span>
                     <FlexHorizontal style={{ width: "100%" }}>
                         <AvatarEdit></AvatarEdit>
-                        <FixableTextArea onBlur={bioText => askSaveProfile(props.dispatch, { bioText })} defaultText={props.profile.bioText} style={{width: "100%", height: "8rem", margin: "1rem", padding: "1rem"}} placeholder="Tell us about you!"></FixableTextArea>
+                        <FixableTextArea onBlur={bioText => askSaveProfile(props.dispatch, { bioText })} defaultText={props.profile.bioText} style={{ width: "100%", height: "8rem", margin: "1rem", padding: "1rem" }} placeholder="Tell us about you!"></FixableTextArea>
                     </FlexHorizontal>
                     <header style={headerStyle}>Collection</header>
-                    {Object.keys(props.profile.collection).length > 0 ? <Collection/> : <NothingSoFar/>}
+                    {Object.keys(props.profile.collection).length > 0 ? <Collection /> : <NothingSoFar />}
                     <header style={headerStyle}>Awards</header>
-                    {props.profile.awards.length > 0 ? <NothingSoFar/> : <NothingSoFar/>}
+                    {props.profile.awards.length > 0 ? <NothingSoFar /> : <NothingSoFar />}
                 </FlexVertical>
             </Center>
             <Logout>Logout</Logout>

@@ -19,8 +19,8 @@ const StyledFlexVertical = styled(CtnGray)`
 const Collection = (props: Props) => {
     const [seeMore, setSeeMore] = useState(false);
 
-    
-    const itemStyle : CSSProperties = {
+
+    const itemStyle: CSSProperties = {
         width: "50%",
         margin: "1rem"
     }
@@ -44,7 +44,7 @@ const Collection = (props: Props) => {
     }
 
     return (
-        <StyledFlexVertical style={{width: "100%", padding: "1rem"}}>
+        <StyledFlexVertical style={{ width: "100%", padding: "1rem" }}>
             {rowsJSX}
             {!seeMore && <BtnTransparent onClick={() => setSeeMore(true)}>See more</BtnTransparent>}
             {seeMore && <BtnTransparent onClick={() => setSeeMore(false)}>Hide</BtnTransparent>}
@@ -53,7 +53,7 @@ const Collection = (props: Props) => {
 
 }
 
-const mapState = (state : AppState) => ({
+const mapState = (state: AppState) => ({
     collection: state.profile.collection
 });
 

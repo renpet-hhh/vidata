@@ -2,7 +2,7 @@ interface Overloads {
     (r: number, g: number, b: number, a?: number): string,
     (rgba: string): string
 }
-const rgbaToHex : Overloads = (rOrRgba: number | string, g?: number, b?: number, a: number = 255) => {
+const rgbaToHex: Overloads = (rOrRgba: number | string, g?: number, b?: number, a: number = 255) => {
     if (typeof rOrRgba === "string") {
         console.log("rgba: " + rOrRgba);
         let rgba = rOrRgba.slice(rOrRgba.indexOf("(") + 1, rOrRgba.length - 1);

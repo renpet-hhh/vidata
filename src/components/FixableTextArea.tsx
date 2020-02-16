@@ -23,7 +23,7 @@ const FixableTextArea = (props: Props) => {
     const [isFixedBeingHovered, setIsFixedBeingHovered] = useState(false);
     /** Used to handle imperative things like focus, text selections... */
     const writableRef = useRef<HTMLTextAreaElement>(null);
-    
+
     /** When the textarea appears, all its text must be selected */
     useEffect(() => {
         if (isWritable && writableRef.current) {
@@ -66,7 +66,7 @@ const FixableTextArea = (props: Props) => {
     const borderColorFromProps = props.style && (props.style.borderColor || (typeof props.style.border === "string" ? props.style.border.split(" ")[2] : undefined));
     const borderColor = isFixedBeingHovered ? props.hoverColor || DEFAULT_BORDER.hoverColor : borderColorFromProps || DEFAULT_BORDER.borderColor;
 
-    const defaultOverwritableStyleForBoth : CSSProperties = {
+    const defaultOverwritableStyleForBoth: CSSProperties = {
         // really important that padding, fontSize and borderWidth are the same for both
         padding: "0.3rem",
         fontSize: "1.1rem",

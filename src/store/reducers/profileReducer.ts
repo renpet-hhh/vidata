@@ -30,7 +30,7 @@ const profileReducer = (state = INITIAL_STATE, action: AnyAction): AppState['pro
                 }
             });
         case 'SAVE_COLLECTION':
-            return {...state, collection: {...state.collection, [action.id]: action.data}};
+            return { ...state, collection: { ...state.collection, [action.id]: action.data } };
         case 'LOGIN':
             return action.profile;
         case 'LOGOUT':

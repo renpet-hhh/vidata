@@ -19,7 +19,7 @@ export interface AppState {
 
 const configStore = (initialState?: AppState): Store<AppState> => {
     let isInClient = typeof window !== "undefined";
-    const actionSanitizer : any = (action : AnyAction) => {
+    const actionSanitizer: any = (action: AnyAction) => {
         const sanitizedAction = Object.assign({}, action);
         if (action.type === "UPDATE") {
             if (action.merge.collection) {
@@ -33,7 +33,7 @@ const configStore = (initialState?: AppState): Store<AppState> => {
         }
         return sanitizedAction;
     }
-    const stateSanitizer : any = (state : AppState) => {
+    const stateSanitizer: any = (state: AppState) => {
         const sanitizedState = Object.assign({}, state);
         if (state.profile) {
             if (state.profile.collection) {
@@ -44,7 +44,7 @@ const configStore = (initialState?: AppState): Store<AppState> => {
     }
     const store: Store<AppState> = createStore(rootReducer, initialState,
         isInClient ?
-        devToolsEnhancer({actionSanitizer, stateSanitizer}) : undefined);
+            devToolsEnhancer({ actionSanitizer, stateSanitizer }) : undefined);
 
     return store;
 }

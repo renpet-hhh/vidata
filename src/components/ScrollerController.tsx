@@ -25,11 +25,11 @@ const DEFAULTS = {
     onChange: () => null
 }
 
-const ScrollerController = (props : Props) => {
+const ScrollerController = (props: Props) => {
     const { label, width, height, radius, value,
         onChange, range, defaultValue, lock } = _.merge({}, DEFAULTS, props);
 
-    const scale : Scale = scaleLinear([0, width], range);
+    const scale: Scale = scaleLinear([0, width], range);
     const position = scale.inverse(value);
     const [showBalloon, setShowBalloon] = useState(false);
 
@@ -41,8 +41,8 @@ const ScrollerController = (props : Props) => {
         const clickOffsetFromPosition = position + RECT.left - e.clientX;
 
         // event below is handled by the Window
-        const handleMouseMove = (evt : MouseEvent) => {
-            let mousePos = evt.clientX;    
+        const handleMouseMove = (evt: MouseEvent) => {
+            let mousePos = evt.clientX;
             let new_pos = mousePos - RECT.left + clickOffsetFromPosition;
             if (new_pos < 0) {
                 new_pos = 0;
@@ -51,7 +51,7 @@ const ScrollerController = (props : Props) => {
             }
             onChange(scale(new_pos));
         };
-        const handleMouseUp = (e : MouseEvent) => {
+        const handleMouseUp = (e: MouseEvent) => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
             setShowBalloon(false)
@@ -60,14 +60,14 @@ const ScrollerController = (props : Props) => {
         window.addEventListener('mouseup', handleMouseUp);
     }
 
-    const barStyle : CSSProperties = {
+    const barStyle: CSSProperties = {
         width: width,
         height: height,
         backgroundColor: "#D0D0D0",
         marginLeft: 8,
         position: "relative"
     }
-    const cirleControllerStyle : CSSProperties = {
+    const cirleControllerStyle: CSSProperties = {
         borderRadius: 25,
         width: 2 * radius,
         height: 2 * radius,

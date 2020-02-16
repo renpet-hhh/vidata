@@ -12,7 +12,7 @@ const useStack = <T>() => {
         stack.current = [];
     }
     const length = () => stack.current.length;
-    return {push, pop, reset, length};
+    return { push, pop, reset, length };
 };
 
 export default useStack;

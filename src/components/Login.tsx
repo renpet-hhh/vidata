@@ -65,7 +65,7 @@ const Login = (props: Props) => {
                         <Alert onClick={() => setAlertText("")}>{alertText}</Alert>
                     </div>
                 }
-                <Form data-testid="Form" onSubmit={onSubmit} style={{padding: "1.5rem"}}>
+                <Form data-testid="Form" onSubmit={onSubmit} style={{ padding: "1.5rem" }}>
                     <LabeledInput label="Username" onChange={setUsername}></LabeledInput>
                     <LabeledInput label="Password" onChange={setPassword}></LabeledInput>
                     <BtnGray type="submit" data-testid="submit">Login</BtnGray>

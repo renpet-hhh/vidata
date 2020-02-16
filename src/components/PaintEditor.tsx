@@ -43,9 +43,9 @@ const PaintEditor = (props: Props) => {
 
     return (
         <div className={props.className}>
-            <PaintGray ref={paintRef} initialImageData={props.initialImageData} color={color} radius={radius} width={props.width} height={props.height} mode={mode} listeners={{getColor: getColorListener}}></PaintGray>
-            <BtnGray onClick={onClickErase} style={{backgroundColor: mode === "erase" ? "#222222" : undefined}}>Erase</BtnGray>
-            <BtnGray onClick={onClickGetColor} style={{backgroundColor: mode === "getColor" ? "#222222" : undefined}}>Get color</BtnGray>
+            <PaintGray ref={paintRef} initialImageData={props.initialImageData} color={color} radius={radius} width={props.width} height={props.height} mode={mode} listeners={{ getColor: getColorListener }}></PaintGray>
+            <BtnGray onClick={onClickErase} style={{ backgroundColor: mode === "erase" ? "#222222" : undefined }}>Erase</BtnGray>
+            <BtnGray onClick={onClickGetColor} style={{ backgroundColor: mode === "getColor" ? "#222222" : undefined }}>Get color</BtnGray>
             <BtnGray onClick={() => paintRef.current && paintRef.current.undo()}>Undo</BtnGray>
             <BtnGray onClick={() => paintRef.current && paintRef.current.redo()}>Redo</BtnGray>
             <BtnGray onClick={() => paintRef.current && paintRef.current.clear()}>Clear</BtnGray>
