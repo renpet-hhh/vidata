@@ -1,8 +1,9 @@
-import { Request, Response } from '../../../../../types/Request';
+import { Request, Response } from '../../../../../types/Request'; 7
 import Connection from '../../../../mongodb/Connection';
 import RequestErr from '../../../../../constants/RequestErr';
 import { UserInfo } from '../../../../../types/Profile';
 import actionUpdateProfile from '../../../../../store/actions/profile/actionUpdateProfile';
+import _ from 'lodash';
 
 /**
  * Saves profile info (account persistent data)
@@ -21,12 +22,14 @@ export const handleSaveProfile = async (req: Request, res: Response) => {
     const validFields: (keyof UserInfo)[] = ["bioText", "awards", "collection"];
     let failed = false;
     for (const attr in req.body) {
-        if (attr === "username") continue;
-        if ((validFields as string[]).includes(attr)) {
+        const field = attr.split(".")[0];
+        if (field === "username") continue;
+        if ((validFields as string[]).includes(field)) {
+            const value = _.get(req.body, attr);
             // @ts-ignore (will change this to do only one db.saveProfile call)
-            await db.saveProfile(req.session.profile!.username, { [attr]: req.body[attr] }).catch(() => { failed = true });
+            await db.saveProfile(req.session.profile!.username, { [attr]: value }).catch(() => { failed = true });
             // @ts-ignore
-            req.session.profile[attr] = req.body[attr];
+            _.set(req.session.profile, attr, value);
             continue;
         }
         res.status(400).send(RequestErr.SYNTAX_ERROR);

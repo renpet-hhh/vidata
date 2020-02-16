@@ -11,6 +11,7 @@ const MongoStore = connectMongo(session);
 
 const anyPreRequesiteIsMissing = () => {
     return (
+        !process.env.PORT ||
         !process.env.SESSION_SECRET ||
         !process.env.MONGO_URI ||
         (process.env.NODE_ENV !== "development" && process.env.NODE_ENV !== "production")
@@ -20,7 +21,7 @@ const anyPreRequesiteIsMissing = () => {
 export const runServer = () => {
     Connection.initialize();
 
-    const PORT = process.env.PORT || 6060;
+    const PORT = Number.parseInt(process.env.PORT!);
     const app = express();
 
     if (anyPreRequesiteIsMissing()) throw new Error("A prerequesite is missing. Check function anyPreRequesiteIsMissing in server.tsx");

@@ -62,7 +62,10 @@ const clientConfig: Configuration = {
         new MiniCssExtractPlugin({
             filename: 'styles.css'
         }),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.PORT': JSON.stringify(process.env.PORT)
+        })
     ]
 
 }

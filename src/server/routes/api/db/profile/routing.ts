@@ -5,8 +5,8 @@ import stopUnauthenticated from '../../../../middlewares/stopUnauthenticated';
 
 export default (app: App) => {
 
-    app.post('/api/db/profile/save', stopUnauthenticated, express.json(), handleSaveProfile);
+    app.post('/api/db/profile/save', stopUnauthenticated, express.json({ limit: '50mb' }), handleSaveProfile);
 
-    app.post('/api/db/profile/get', stopUnauthenticated, express.json(), handleGetProfile);
+    app.post('/api/db/profile/get', stopUnauthenticated, express.json({ limit: '50mb' }), handleGetProfile);
 
 }
