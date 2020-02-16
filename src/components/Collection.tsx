@@ -26,7 +26,9 @@ const Collection = (props: Props) => {
     }
     const galleryItems = [];
     for (const id in props.collection) {
-        const imageData = new ImageData(props.collection[id], 500, 500);
+        if (typeof ImageData === 'undefined') break;
+        const pixelsArr = props.collection[id];
+        const imageData = new ImageData(pixelsArr, 500, 500);
         galleryItems.push(
             <GalleryItem id={id} key={id} imageData={imageData} style={itemStyle}></GalleryItem>
         );
