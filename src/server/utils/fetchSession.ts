@@ -10,7 +10,7 @@ import DbWrapper from "../mongodb/DbWrapper";
  */
 const fetchSession = async (req: Request, username: string, dbWrapper?: DbWrapper) => {
     if (!req.session.logged) throw new Error("Asked to fetch user info, but user is not logged in")
-    const db = dbWrapper ? dbWrapper : await Connection.get();
+    const db = dbWrapper ? dbWrapper : await Connection.getDb();
     const profile = await db.getProfile(username);
     if (profile) {
         const avatarPath = path.join(path.resolve(process.env.ROOT!, "files/images/avatar"), `${profile.username}.jpeg`)

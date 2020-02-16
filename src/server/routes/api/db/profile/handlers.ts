@@ -17,12 +17,13 @@ import actionUpdateProfile from '../../../../../store/actions/profile/actionUpda
  * - 500 : MONGODB_ERROR
  */
 export const handleSaveProfile = async (req: Request, res: Response) => {
-    const db = await Connection.get();
+    const db = await Connection.getDb();
     const validFields: (keyof UserInfo)[] = ["bioText", "awards", "collection"];
     let failed = false;
     for (const attr in req.body) {
         if (attr === "username") continue;
         if ((validFields as string[]).includes(attr)) {
+            // @ts-ignore (will change this to do only one db.saveProfile call)
             await db.saveProfile(req.session.profile!.username, { [attr]: req.body[attr] }).catch(() => { failed = true });
             // @ts-ignore
             req.session.profile[attr] = req.body[attr];
@@ -73,7 +74,7 @@ export const handleSaveProfile = async (req: Request, res: Response) => {
  * 
  */
 export const handleGetProfile = async (req: Request, res: Response) => {
-    const db = await Connection.get();
+    const db = await Connection.getDb();
     const user = await db.getProfile(req.session.profile!.username, req.body.filter);
     if (!user) {
         res.status(500).send(RequestErr.USERNAME_NOT_FOUND);

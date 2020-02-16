@@ -1,5 +1,4 @@
 import express from 'express';
-import multer from 'multer';
 import path from 'path';
 
 import api$db from './api/db/routing';
@@ -12,19 +11,34 @@ import initSession from '../global-middlewares/initSession';
 import serverRenderer from '../global-middlewares/serverRenderer';
 
 import webpack, { Configuration } from 'webpack';
-const webpackConfig : [Configuration, Configuration] = require('../../../webpack.config.js');
+const webpackConfig: [Configuration, Configuration] = require('../../../webpack.config.js');
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import { App } from '../../types/Request';
 import setStaticRoutes from '../global-middlewares/setStaticRoutes';
 import Connection from '../mongodb/Connection';
+import multer from 'multer';
+import RequestErr from '../../constants/RequestErr';
 
+const diskStorage = multer.diskStorage({
+    destination: 'files/images/avatar',
+    filename: (req, file, cb) => {
+        if (!req.session) {
+            cb(new Error(RequestErr.MONGOSTORE_DISCONNECTED), "");
+            return;
+        }
+        if (!req.session.profile.username) return;
+        cb(null, `${req.session.profile.username}.jpeg`);
+    }
+});
 
-const setRoutes = (app: ReturnType<typeof express>, extra: {
-    upload: multer.Instance
-}) => {
-    
+const upload = multer({
+    storage: diskStorage
+});
+
+const setRoutes = (app: ReturnType<typeof express>) => {
+
     /**  Global middlewares */
     app.use(loggerMiddleware);
     app.use(initSession);  // after initSession the `req.session` is guaranteed to be initialized
@@ -50,7 +64,7 @@ const setRoutes = (app: ReturnType<typeof express>, extra: {
     api$db(app as App);
     api$db$session(app as App);
     api$db$profile(app as App);
-    api$db$avatar(app as App, extra.upload);
+    api$db$avatar(app as App, upload);
 
 
     if (process.env.NODE_ENV === "development") {
@@ -84,7 +98,7 @@ const setRoutes = (app: ReturnType<typeof express>, extra: {
         console.log("running in production");
 
         app.use('/', express.static(path.resolve(process.env.ROOT!, 'build')));
-        app.use(serverRenderer({promiseDbWrapper: Connection.get()}) as any);
+        app.use(serverRenderer({ promiseDbWrapper: Connection.getDb() }) as any);
 
     } else {
         throw new Error("process.env.NODE_ENV is neither development nor production and that error wasn't catched before this function")

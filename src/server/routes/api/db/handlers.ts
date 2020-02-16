@@ -23,7 +23,7 @@ import RequestErr from '../../../../constants/RequestErr';
  */
 export const handleExists = async (req: Request, res: Response) => {
     if (req.body.type === "username" && req.body.name) {
-        const db = await Connection.get();
+        const db = await Connection.getDb();
         res.status(200).send(await db.userExists(req.body.name));
     } else {
         res.status(400).send(RequestErr.SYNTAX_ERROR);

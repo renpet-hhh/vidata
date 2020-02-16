@@ -1,10 +1,9 @@
 export interface DBProfile {
-    _id: string,
     username: string,
     password: string,
     email: string,
     bioText: string,
-    collection: {[id: string]: Uint8ClampedArray},
+    collection: { [id: string]: Uint8ClampedArray },
     awards: any[]
 }
 
@@ -14,4 +13,4 @@ export interface OutOfDBProfile {
     }
 }
 
-export interface UserInfo extends Omit<DBProfile & OutOfDBProfile, "_id" | "password"> { };
+export interface UserInfo extends Omit<DBProfile & OutOfDBProfile, "password"> { };

@@ -72,7 +72,7 @@ export default class DbWrapper {
      * 
      * Can't edit username, password and email
      */
-    saveProfile = async (username: string | undefined, data: DeepPartial<DBProfile>) => {
+    saveProfile = async (username: string | undefined, data: DBProfile) => {
         if (!username) return;
         const result = await this._users.updateOne({ username: username }, {
             $set: data
@@ -90,7 +90,6 @@ export default class DbWrapper {
         if (!user) return null;
         const info: DBProfile = Object.assign({}, user);
         delete info.password;
-        delete info._id
         return info;
     }
 
@@ -101,11 +100,6 @@ export default class DbWrapper {
         }
         if (username) {
             await this._users.updateOne({ username }, {
-                $unset: unsetObject
-            });
-        } else {
-            // removing info from ALL profiles
-            await this._users.updateMany({}, {
                 $unset: unsetObject
             });
         }

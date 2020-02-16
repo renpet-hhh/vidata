@@ -21,7 +21,7 @@ import actionLoginByReq from '../../../../../store/actions/common/actionLoginByR
  *   
  */
 export const handleSignUp = async (req: Request, res: Response) => {
-    const db = await Connection.get();
+    const db = await Connection.getDb();
     const username = req.body.username;
     const password = req.body.password;
     try {
@@ -46,7 +46,7 @@ export const handleSignUp = async (req: Request, res: Response) => {
  * 
  *  */
 export const handleSignIn = async (req: Request, res: Response) => {
-    const db = await Connection.get();
+    const db = await Connection.getDb();
     const { username, password } = req.body;
     if (!username || !password) {
         res.status(400).send(RequestErr.SYNTAX_ERROR);
