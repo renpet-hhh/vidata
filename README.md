@@ -1,11 +1,12 @@
 # vidata
 
-Data visualization app for learning purposes
+Website for (my own) learning purposes.
+Originally, it was supposed to be a data visualization website, hence its name.
 
 * Index
-1. [Get Started](#Get_Started)
+1. [Get Started](#get-started)
 
-## Get_Started
+## Get Started
 
 1. Clone this repo with `git clone`
 2. Create an .env file and define the variables ROOT, MONGO_URI, SESSION_SECRET, PORT and NODE_ENV
