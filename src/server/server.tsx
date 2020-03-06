@@ -4,6 +4,7 @@ import session from 'express-session';
 import connectMongo from 'connect-mongo';
 import Connection from './mongodb/Connection';
 import setRoutes from './routes/setRoutes';
+import serverRenderer from './global-middlewares/serverRenderer';
 
 
 const MongoStore = connectMongo(session);
@@ -57,3 +58,6 @@ export const runServer = () => {
         console.log("Listening on " + PORT + "...");
     })
 }
+
+// used by webpackHotServerMiddleware
+export default serverRenderer;
