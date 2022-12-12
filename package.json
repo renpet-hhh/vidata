@@ -28,7 +28,7 @@
     "connected-react-router": "^6.7.0",
     "cors": "^2.8.5",
     "eventsource-polyfill": "^0.9.6",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.0",
     "lodash": "^4.17.15",
     "mongodb": "^3.5.3",
